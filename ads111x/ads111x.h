@@ -87,6 +87,13 @@ public:
      * @return float 
      */
     float readVoltage(adsChan_t channel);
+    /**
+     * @brief Set the Voltage Divider object
+     * 
+     * @param r1 wiederstand zwischen zi Messender Spannung und messpin
+     * @param r2 Widerstand zwischen Messpin und Ground
+     */
+    void setVoltageDivider(float r1,float r2);
 
 protected:
     uint8_t confOS;
@@ -102,4 +109,5 @@ protected:
     uint8_t delayTime;
     float i_lsb;
     void calcInternals();
+    float voltageDivisonFactor;
 };
