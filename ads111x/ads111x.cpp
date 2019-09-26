@@ -71,28 +71,28 @@ void ADS1115::calcInternals()
     switch (confDR)
     {
     case SPS8:
-        delayTime = 1000 / 8 + 2;
+        delayTime = 126;
         break;
     case SPS16:
-        delayTime = 1000 / 16 + 2;
+        delayTime = 64;
         break;
     case SPS32:
-        delayTime = 1000 / 32 + 2;
+        delayTime = 33;
         break;
     case SPS64:
-        delayTime = 1000 / 64 + 2;
+        delayTime = 17;
         break;
     case SPS128:
-        delayTime = 1000 / 128 + 2;
+        delayTime = 9;
         break;
     case SPS250:
-        delayTime = 1000 / 250 + 2;
+        delayTime = 5;
         break;
     case SPS475:
-        delayTime = 1000 / 475 + 2;
+        delayTime = 4;
         break;
     case SPS860:
-        delayTime = 1000 / 860 + 2;
+        delayTime = 3;
         break;
     default:
         delayTime = 200;
