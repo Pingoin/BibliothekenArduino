@@ -166,6 +166,16 @@ public:
      * @return float Leistung in W
      */
     float readPower();
+
+    /**
+     * @brief Set the Mode object
+     * 
+     * @param mode 
+     */
+    void setMode(operatingMode_t mode);
+    void setAvgMode(avgSetting_t mode);
+    void setShuntTime(convTime_t time);
+    void setBusTime(convTime_t time);
 protected:
     /**
      * @brief Einstellung der Durchschnittsberechnung
@@ -218,4 +228,16 @@ protected:
      * 
      */
     uint16_t calReg;
+
+    /**
+     * @brief Messen falls es muss
+     * 
+     */
+    void forceMeasurement();
+
+    /**
+     * @brief Schreibt die Aktuelle Konfiguration in den Register
+     * 
+     */
+    void writeConfig();
 };
