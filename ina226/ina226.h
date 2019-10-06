@@ -246,5 +246,5 @@ protected:
      * @param register der Zu lesende Register
      * @return uint16_t Inhalt des Registers
      */
-    uint16_t readRegister(uint8_t register);
+    uint16_t readRegister(uint8_t registerNR);
 };

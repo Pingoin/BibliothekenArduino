@@ -39,11 +39,11 @@ void ina226::calcInternals()
     uint8_t shuntDelay;
     if (avgSetup <= 3)
     {
-        factor = (1 << avgSetup * 2);
+        factor = (1 << (avgSetup * 2));
     }
     else
     {
-        factor = (1 << avgSetup + 3);
+        factor = (1 << (avgSetup + 3));
     }
 
     if (busTime<MS11){
@@ -62,7 +62,7 @@ void ina226::calcInternals()
 float ina226::readBusVoltage()
 {
     forceMeasurement();
-    unt16_t value = readRegister(0x2);
+    uint16_t value = readRegister(0x2);
     return (float)value * lsbBUS * 1e-3;
 };
 float ina226::readShuntVoltage()
@@ -151,10 +151,10 @@ void ina226::setBusTime(convTime_t time)
     writeConfig();
 }
 
-uint16_t ina226::readRegister(uint8_t register)
+uint16_t ina226::readRegister(uint8_t registerNR)
 {
     Wire.beginTransmission(i2cAddr);
-    Wire.write(register);
+    Wire.write(registerNR);
     Wire.endTransmission();
     Wire.requestFrom(i2cAddr, (uint8_t)2);
     return ((Wire.read() << 8) | Wire.read());
