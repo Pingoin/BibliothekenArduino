@@ -35,6 +35,8 @@ bool ina226::conneted()
 void ina226::calcInternals()
 {
     uint16_t factor;
+    uint8_t busDelay;
+    uint8_t shuntDelay;
     if (avgSetup <= 3)
     {
         factor = (1 << avgSetup * 2);
@@ -43,7 +45,18 @@ void ina226::calcInternals()
     {
         factor = (1 << avgSetup + 3);
     }
-    delayTime = ((1 << (busTime - 4)) + (1 << (shuntTime - 4))) * factor;
+
+    if (busTime<MS11){
+        busDelay=1;
+    }else{
+    busDelay= (1 << (busTime - 4)) +1;;
+    }
+    if (shuntTime<MS11){
+        shuntDelay=1;
+    }else{
+        shuntDelay= (1 << (shuntTime - 4))+1;
+    }
+    delayTime = (busDelay+shuntDelay)*factor+1;
 }
 
 float ina226::readBusVoltage()
