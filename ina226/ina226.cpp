@@ -35,54 +35,41 @@ bool ina226::conneted()
 void ina226::calcInternals()
 {
     uint16_t factor;
-    if (avgSetup<=3){
-        factor= (1<< avgSetup*2);
-    }else{
-        factor= (1<< avgSetup+3);
+    if (avgSetup <= 3)
+    {
+        factor = (1 << avgSetup * 2);
     }
-    delayTime=((1<<(busTime-4))+(1<<(shuntTime-4)))*factor;
+    else
+    {
+        factor = (1 << avgSetup + 3);
+    }
+    delayTime = ((1 << (busTime - 4)) + (1 << (shuntTime - 4))) * factor;
 }
 
 float ina226::readBusVoltage()
 {
     forceMeasurement();
-    Wire.beginTransmission(i2cAddr);
-    Wire.write(0x2);
-    Wire.endTransmission();
-    Wire.requestFrom(i2cAddr, (uint8_t)2);
-    unt16_t value = ((Wire.read() << 8) | Wire.read());
+    unt16_t value = readRegister(0x2);
     return (float)value * lsbBUS * 1e-3;
 };
 float ina226::readShuntVoltage()
 {
     forceMeasurement();
-    Wire.beginTransmission(i2cAddr);
-    Wire.write(0x1);
-    Wire.endTransmission();
-    Wire.requestFrom(i2cAddr, (uint8_t)2);
-    int16_t value = ((Wire.read() << 8) | Wire.read());
+    int16_t value = readRegister(0x1);
     return (float)value * lsbShunt * 1e-6;
 };
 
 float ina226::readCurrent()
 {
     forceMeasurement();
-    Wire.beginTransmission(i2cAddr);
-    Wire.write(0x4);
-    Wire.endTransmission();
-    Wire.requestFrom(i2cAddr, (uint8_t)2);
-    int16_t value = ((Wire.read() << 8) | Wire.read());
+    int16_t value = readRegister(0x4);
     return (float)value * lsbShuntCurrent;
 };
 
 float ina226::readPower()
 {
     forceMeasurement();
-    Wire.beginTransmission(i2cAddr);
-    Wire.write(0x3);
-    Wire.endTransmission();
-    Wire.requestFrom(i2cAddr, (uint8_t)2);
-    int16_t value = ((Wire.read() << 8) | Wire.read());
+    int16_t value = readRegister(0x3);
     return (float)value * lsbShuntCurrent * 25;
 };
 
@@ -119,30 +106,43 @@ void ina226::writeConfig()
     uint8_t config1 = config >> 8;
     uint8_t config2 = config & 0xff;
 
-    Wire.beginTransmission(i_i2cAddr);
-    Wire.write(0x1);
+    Wire.beginTransmission(i2cAddr);
+    Wire.write(0x0);
     Wire.write(config1);
     Wire.write(config2);
     Wire.endTransmission();
 }
 
-    void setMode(operatingMode_t mode){
-        this.operatingMode=mode;
-        calcInternals();
-        writeConfig();
-    }
-    void setAvgMode(avgSetting_t mode){
-        this.avgSetup=mode;
-        calcInternals();
-        writeConfig();
-    }
-    void setShuntTime(convTime_t time){
-        this.shuntTime=time;
-        calcInternals();
-        writeConfig();
-    }
-    void setBusTime(convTime_t time){
-        this.busTime=time;
-        calcInternals();
-        writeConfig();
-    }
+void ina226::setMode(operatingMode_t mode)
+{
+    this.operatingMode = mode;
+    calcInternals();
+    writeConfig();
+}
+void ina226::setAvgMode(avgSetting_t mode)
+{
+    this.avgSetup = mode;
+    calcInternals();
+    writeConfig();
+}
+void ina226::setShuntTime(convTime_t time)
+{
+    this.shuntTime = time;
+    calcInternals();
+    writeConfig();
+}
+void ina226::setBusTime(convTime_t time)
+{
+    this.busTime = time;
+    calcInternals();
+    writeConfig();
+}
+
+uint16_t ina226::readRegister(uint8_t register)
+{
+    Wire.beginTransmission(i2cAddr);
+    Wire.write(register);
+    Wire.endTransmission();
+    Wire.requestFrom(i2cAddr, (uint8_t)2);
+    return ((Wire.read() << 8) | Wire.read());
+}

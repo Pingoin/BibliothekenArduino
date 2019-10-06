@@ -240,4 +240,11 @@ protected:
      * 
      */
     void writeConfig();
+    /**
+     * @brief Liest einen Register aus
+     * 
+     * @param register der Zu lesende Register
+     * @return uint16_t Inhalt des Registers
+     */
+    uint16_t readRegister(uint8_t register);
 };
