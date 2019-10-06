@@ -1,14 +1,14 @@
 #include "ina226.h"
 ina226::ina226(uint8_t i2cAddr)
 {
-    this.avgSetup = AVG1;
-    this.busTime = MS11;
-    this.shuntTime = MS11;
-    this.operatingMode = BothCont;
-    this.i2cAddr = i2cAddr;
-    this.lsbShuntCurrent = 0;
-    this.calReg = 0;
-    this.delayTime = 0;
+    this->avgSetup = AVG1;
+    this->busTime = MS11;
+    this->shuntTime = MS11;
+    this->operatingMode = BothCont;
+    this->i2cAddr = i2cAddr;
+    this->lsbShuntCurrent = 0;
+    this->calReg = 0;
+    this->delayTime = 0;
     calcInternals();
 }
 ina226::~ina226()
@@ -128,25 +128,25 @@ void ina226::writeConfig()
 
 void ina226::setMode(operatingMode_t mode)
 {
-    this.operatingMode = mode;
+    this->operatingMode = mode;
     calcInternals();
     writeConfig();
 }
 void ina226::setAvgMode(avgSetting_t mode)
 {
-    this.avgSetup = mode;
+    this->avgSetup = mode;
     calcInternals();
     writeConfig();
 }
 void ina226::setShuntTime(convTime_t time)
 {
-    this.shuntTime = time;
+    this->shuntTime = time;
     calcInternals();
     writeConfig();
 }
 void ina226::setBusTime(convTime_t time)
 {
-    this.busTime = time;
+    this->busTime = time;
     calcInternals();
     writeConfig();
 }
