@@ -30,21 +30,21 @@
  */
 typedef enum
 {
-    //1
+    ///1
     AVG1 = 0b000,
-    //4
+    ///4
     AVG4 = 0b001,
-    //16
+    ///16
     AVG16 = 0b010,
-    //64
+    ///64
     AVG64 = 0b011,
-    //128
+    ///128
     AVG128 = 0b100,
-    //256
+    ///256
     AVG256 = 0b101,
-    //512
+    ///512
     AVG512 = 0b110,
-    //1024
+    ///1024
     AVG1024 = 0b111
 
 } avgSetting_t;
@@ -56,21 +56,21 @@ typedef enum
  */
 typedef enum
 {
-    //140 mys
+    ///140 mys
     MYS140 = 0b000,
-    //204 mys
+    ///204 mys
     MYS204 = 0b001,
-    //332 mys
+    ///332 mys
     MYS332 =0b010,
-    //588 mys
+    ///588 mys
     MYS588 = 0b011,
-    //1.1 ms
+    ///1.1 ms
     MS11 = 0b100,
-    //2.116 ms
+    ///2.116 ms
     MS21 = 0b101,
-    //4.156 ms
+    ///4.156 ms
     MS42 = 0b110,
-    //8.244 ms
+    ///8.244 ms
     MS82 = 0b111
 
 } convTime_t;
@@ -82,21 +82,21 @@ typedef enum
  */
 typedef enum
 {
-    //Power-Down (or Shutdown)
+    ///Power-Down (or Shutdown)
     PowDown = 0b000,
-    //Shunt Voltage, Triggered
+    ///Shunt Voltage, Triggered
     ShuntTrig = 0b001,
-    //Bus Voltage, Triggered
+    ///Bus Voltage, Triggered
     BusTrig =0b010,
-    //Shunt and Bus, Triggered
+    ///Shunt and Bus, Triggered
     BothTrig = 0b011,
-    //Power-Down (or Shutdown)
+    ///Power-Down (or Shutdown)
     PowDown2 = 0b100,
-    //Shunt Voltage, Continuous
+    ///Shunt Voltage, Continuous
     ShuntCont = 0b101,
-    //Bus Voltage, Continuous
+    ///Bus Voltage, Continuous
     BusCont = 0b110,
-    //Shunt and Bus, Continuous
+    ///Shunt and Bus, Continuous
     BothCont = 0b111
 
 } operatingMode_t;
@@ -135,8 +135,17 @@ public:
      * @return false Sensor ist NICHT vorhanden
      */
     bool conneted();
-
+    /**
+     * @brief Busspannung Lesen
+     *  
+     * @return float Busspannung in V 
+     */
     float readBusVoltage();
+    /**
+     * @brief Shuntspannung Lesen
+     * 
+     * @return float Shuntspannung in V
+     */
     float readShuntVoltage();
     /**
      * @brief Enstellungen für den Shunt
@@ -145,6 +154,18 @@ public:
      * @param voltage Nennspannungsabfall in mV
      */
     void setShunt(float current,float voltage);
+    /**
+     * @brief Strom über den Shunt auslesen
+     * 
+     * @return float Strom in A
+     */
+    float readCurrent();
+    /**
+     * @brief Leistung ausgeben
+     * 
+     * @return float Leistung in W
+     */
+    float readPower();
 protected:
     /**
      * @brief Einstellung der Durchschnittsberechnung
@@ -185,4 +206,16 @@ protected:
      * 
      */
     void calcInternals();
+
+    /**
+     * @brief Dynamischer LSB für den Strom
+     * 
+     */
+    float lsbShuntCurrent;
+
+    /**
+     * @brief Registereinstellung für die Stromberechnung
+     * 
+     */
+    uint16_t calReg;
 };
