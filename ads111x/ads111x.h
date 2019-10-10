@@ -148,13 +148,17 @@ public:
      */
     float readVoltage(adsChan_t channel);
     /**
-     * @brief Setzt einen Spannungsteiler
+     * @brief Misst die Spannung und gibt den Wert aus
      * 
-     * @param r1 wiederstand zwischen zu Messender Spannung und messpin
-     * @param r2 Widerstand zwischen Messpin und Ground
+     * Eine Berechnung mit Spannungsteiler ist Möglich wenn dieser per setVoltageDivider(float r1, float r2) eingetragen wird
+     * Die Dauer der messung ist Abhängig von dem gewählten Gain
+     * 
+     * @param channel Der zu messende Kanal/die zu vergleichenden Kanäle als \ref adsChan_t
+     * @param R1 Widerstand zwischen Spannung und sensor
+     * @param R2 Widerstand ziwschen Sensor und GNG
+     * @return float die gemessene Spannung in Volt
      */
-    void setVoltageDivider(float r1, float r2);
-
+    float readVoltage(adsChan_t channel,float R1,float R2);
 protected:
     /**
      * @brief I2C-Konfiguration des Status
@@ -226,9 +230,5 @@ protected:
      * 
      */
     void calcInternals();
-    /**
-     * @brief Faktor für den Spannungsteiler
-     * 
-     */
-    float voltageDivisonFactor;
+
 };

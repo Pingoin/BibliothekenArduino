@@ -11,7 +11,7 @@ ADS1115::ADS1115(uint8_t i2cAddr)
     confCompLat = 0x0;
     confCompQue = 0x3;
     i_i2cAddr = i2cAddr;
-    voltageDivisonFactor=1;
+
     calcInternals();
 }
 ADS1115::~ADS1115()
@@ -40,7 +40,7 @@ void ADS1115::setGain(adsGain_t gain)
     confPGA = gain;
     calcInternals();
 }
-float ADS1115::readVoltage(adsChan_t channel)
+float ADS1115::readVoltage(adsChan_t channel,float R1,float R2)
 {
 
     confMUX = channel;
@@ -58,7 +58,11 @@ float ADS1115::readVoltage(adsChan_t channel)
     Wire.endTransmission();
     Wire.requestFrom(i_i2cAddr, (uint8_t) 2);
     int16_t value = ((Wire.read() << 8) | Wire.read());
-    return (float)value*i_lsb*voltageDivisonFactor;
+    return (float)value*i_lsb*(R1+R2)/R2;
+}
+float ADS1115::readVoltage(adsChan_t channel)
+{
+    return readVoltage(channel,0,1);
 }
 void ADS1115::setDataRate(adsSPS_t dataRate)
 {
@@ -123,7 +127,4 @@ void ADS1115::calcInternals()
         i_lsb = 187.5e-6;
         break;
     }
-}
-void ADS1115::setVoltageDivider(float r1,float r2){
-    voltageDivisonFactor= r2/(r1+r2);
 }
